@@ -12,9 +12,11 @@ A fully working pddl solution to the unfamous game - "save the princes" with ful
 git clone https://github.com/JonathanLibes/save-the-princes-pddl.git
 ```
 ### 2. Run the project
+```sh
 for running the project, navigate to the main repo directory
 now you will need or to open the file index.html with browser (chrome/firefox, ie not tested)
 or
 host the directory locally with lite-server or any other local host gosting app
+```
 --------------------------
 All the code is written by Haim Petel And Jonathan Libeskind
