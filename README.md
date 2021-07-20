@@ -2,6 +2,7 @@
 A fully working pddl solution to the unfamous game - "save the princes" with full gui
 
 [demo](https://save-the-princes.surge.sh/)
+![image](https://user-images.githubusercontent.com/24359252/126337952-2336cd01-e7f8-49c2-80e8-0745bcdda4c9.png)
 
 
 # Save the princes PDDL
