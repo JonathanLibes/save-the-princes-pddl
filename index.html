@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <title>save the princes</title>
+    <style>
+        body,
+        html {
+            background-image: linear-gradient(rgba(255, 255, 255, 0.750), rgba(255, 255, 255, 0.746)), url('./bg.jpg');
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .board-container {
+            width: 750px;
+            height: 720PX;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .board {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            background: azure;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cell {
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 240px;
+            height: 240px;
+            max-width: 240px;
+            max-height: 240px;
+            position: relative;
+            background: url('./grass.png');
+            background-repeat: no-repeat;
+            background-position: bottom center;
+            background-size: 245PX auto;
+        }
+
+        img {
+            position: absolute;
+            max-width: 100%;
+            max-height: 60%;
+        }
+
+        img[data-figure="princess"] {
+            z-index: 0;
+            background: url('./lock.png');
+            background-repeat: no-repeat;
+            background-position: top right;
+            background-size: contain;
+        }
+
+        img[data-figure="princess"] :after {
+            width: 100px;
+            height: 100px;
+        }
+
+        img[data-figure="hero"] {
+            z-index: 1;
+        }
+
+        img[data-figure="key"] {
+            z-index: 1;
+        }
+
+        img[data-figure="princess"]~img[data-figure="hero"],
+        img[data-figure="hero"]~img[data-figure="princess"] {
+            left: -10px;
+            border: initial;
+            background: initial;
+        }
+
+        img[data-figure="key"]~img[data-figure="princess"] {
+            left: -10px;
+            border: initial;
+            background: initial;
+            display: none;
+        }
+
+        .steps-container {
+            padding: 10px;
+            font-size: 26px;
+        }
+
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea {
+            width: 40vw;
+            height: 40vh;
+        }
+
+        .main-container {
+            display: flex;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .characters {
+            display: flex;
+            width: 330px;
+            flex-wrap: wrap;
+        }
+
+        .characters img {
+            max-width: 240px;
+            max-height: 155px;
+            position: initial;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 30%;
+        }
+
+        .header {
+            display: flex;
+        }
+
+        .btn-container {
+            padding: 18px;
+        }
+
+        button {
+            transition: .2s ease-in;
+            cursor: pointer;
+            padding: 8px 22px;
+            color: white;
+            background-color: #8dc155;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button:hover {
+            transition: .2s ease-in;
+            background-color: #5f8b31;
+        }
+
+        .instructions {
+            width: 430px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: url('./charter.png');
+            background-repeat: no-repeat;
+            background-position: top right;
+            background-size: cover;
+            text-align: center;
+            margin-left: 70px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 7px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+        .instructions p {
+            width: 223px;
+            font-size: 17px;
+        }
+
+        .disabled {
+            pointer-events: none;
+            opacity: .5;
+        }
+
+        .dropdown-menu {
+            transform: translate(20px, -20px);
+        }
+        #menu1::after{
+            content: '›';
+            display: inline-block;
+            transform: rotate(90deg) translateY(-5px);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="characters">
+            <img id="dragon-pos" src="./dragon.gif" onclick="onCharacterSelection(event)">
+            <img id="key-pos" src="./key.png" onclick="onCharacterSelection(event)">
+            <img id="princes-pos" src="./princess.png" onclick="onCharacterSelection(event)">
+            <img id="hero-pos" src="./hero.png" onclick="onCharacterSelection(event)">
+            <img id="goal" src="./goal.png" onclick="onCharacterSelection(event)">
+            <img id="block-pos" src="./block.png" onclick="onCharacterSelection(event)">
+            <img id="sword-pos" src="./sword.png" onclick="onCharacterSelection(event)">
+        </div>
+        <div class="board-container">
+            <div class="steps-container">
+                Steps: <span class="current-step">0</span>/<span class="steps"></span>
+            </div>
+            <div class="header">
+                <div class="dropdown btn-container">
+                    <button class="btn btn-primary dropdown-toggle" id="menu1" type="button"
+                        data-toggle="dropdown">Select Problem/Custom
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li onclick="selectStage(1)" role="presentation"><a role="menuitem" tabindex="-1"
+                                href="#">problem #1</a></li>
+                        <li onclick="selectStage(2)" role="presentation"><a role="menuitem" tabindex="-1" href="#">problem #2</a></li>
+                        <li onclick="selectStage(3)" role="presentation"><a role="menuitem" tabindex="-1" href="#">problem #3</a></li>
+                        <li role="presentation" class="divider"></li>
+                        <li onclick="selectStage('custom')" role="presentation"><a role="menuitem" tabindex="-1" href="#">custom</a></li>
+                    </ul>
+                </div>
+                <div class="solve disabled btn-container">
+                    <button onclick="solve()">Solve</button>
+                </div>
+                <div class="repeat disabled btn-container">
+                    <button onclick="repeatLastSol()">Repeat last solution</button>
+                </div>
+                <div class="reset btn-container">
+                    <button onclick="reset()">Reset</button>
+                </div>
+            </div>
+            <div class="board">
+
+            </div>
+        </div>
+        <div class="instructions">
+            <h3>Instructions</h3>
+            <p>Select a character by clicking on it, than choose any place on the game board that you want to place your
+                character on. Do the previous step with all characters and then press the 'Solve' button. You can reset
+                the game to it's initial state at any time by pressing on 'Reset' button. You can repeat planner last
+                solution by pressing on 'Repeat last solution' button.</p>
+        </div>
+        <!-- <div  class="editor-container">
+            <textarea class="domain">
+                ;Header and description
+
+                (define (domain domain_name)
+                
+                    ;remove requirements that are not needed
+                    (:requirements :strips :fluents :typing :conditional-effects :negative-preconditions :equality :disjunctive-preconditions)
+                
+                    (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
+                        cell player princess-status key-status
+                    )
+                
+                    ; un-comment following line if constants are needed
+                    ;(:constants )
+                    (:constants
+                        cell-1-1 - cell
+                        cell-2-1 - cell
+                    )
+                
+                    (:predicates ;todo: define predicates here
+                        (connected ?from - cell ?to - cell)
+                        (hero-pos ?position - cell)
+                        (princes-pos ?position - cell)
+                        (stone-pos ?position - cell)
+                        (key-pos ?position - cell)
+                        (goal ?position - cell)
+                        (dragon-pos ?position - cell)
+                        (dragon-mov ?heroPosition - cell ?from - cell ?to - cell)
+                
+                    )
+                    (:functions ;todo: define numeric functions here
+                
+                    )
+                
+                    (:action walk
+                        :parameters (?from - cell ?to - cell ?dragon - cell)
+                        :precondition (and
+                            (dragon-pos ?dragon)
+                            (not (dragon-pos ?to))
+                            (not (stone-pos ?to))
+                            (hero-pos ?from)
+                            (not (princes-pos ?to))
+                            (not (key-pos ?to))
+                            (or (connected ?from ?to) (connected ?to ?from))
+                        )
+                        :effect (and
+                            (not (hero-pos ?from))
+                            (hero-pos ?to)
+                            (when
+                                (and (dragon-pos cell-1-1))
+                                (and (dragon-pos cell-2-1) (not(dragon-pos ?dragon)))
+                            )
+                            (when
+                                (and (dragon-pos cell-2-1))
+                                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
+                            )
+                        )
+                    )
+                    (:action walk-with-princes
+                        :parameters (?from - cell ?to - cell ?dragon - cell)
+                        :precondition (and
+                            (dragon-pos ?dragon)
+                            (not (dragon-pos ?to))
+                            (not (stone-pos ?to))
+                            (hero-pos ?from)
+                            (princes-pos ?from)
+                            (or (connected ?from ?to) (connected ?to ?from))
+                        )
+                        :effect (and
+                            (not (hero-pos ?from))
+                            (hero-pos ?to)
+                            (not (princes-pos ?from))
+                            (princes-pos ?to)
+                            (not (key-pos ?from))
+                            (key-pos ?to)
+                            (when
+                                (and (dragon-pos cell-1-1))
+                                (and (dragon-pos cell-2-1) (not(dragon-pos ?dragon)))
+                            )
+                            (when
+                                (and (dragon-pos cell-2-1))
+                                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
+                            )
+                        )
+                    )
+                    (:action walk-with-key
+                        :parameters (?from - cell ?to - cell ?dragon - cell)
+                        :precondition (and
+                            (dragon-pos ?dragon)
+                            (not (dragon-pos ?to))
+                            (not (stone-pos ?to))
+                            (hero-pos ?from)
+                            (key-pos ?from)
+                            (not (princes-pos ?to))
+                            (or (connected ?from ?to) (connected ?to ?from))
+                        )
+                        :effect (and
+                            (not (hero-pos ?from))
+                            (hero-pos ?to)
+                            (not (key-pos ?from))
+                            (key-pos ?to)
+                            (when
+                                (and (dragon-pos cell-1-1))
+                                (and (dragon-pos cell-2-1) (not(dragon-pos ?dragon)))
+                            )
+                            (when
+                                (and (dragon-pos cell-2-1))
+                                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
+                            )
+                        )
+                    )
+                    (:action walk-to-unlock-princes
+                        :parameters (?from - cell ?to - cell ?dragon - cell)
+                        :precondition (and
+                            (dragon-pos ?dragon)
+                            (not (dragon-pos ?to))
+                            (hero-pos ?from)
+                            (key-pos ?from)
+                            (princes-pos ?to)
+                            (or (connected ?from ?to) (connected ?to ?from))
+                        )
+                        :effect (and
+                            (not (hero-pos ?from))
+                            (hero-pos ?to)
+                            (not (key-pos ?from))
+                            (key-pos ?to)
+                            (when
+                                (and (dragon-pos cell-1-1))
+                                (and (dragon-pos cell-2-1) (not(dragon-pos ?dragon)))
+                            )
+                            (when
+                                (and (dragon-pos cell-2-1))
+                                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
+                            )
+                        )
+                    )
+                    (:action walk-to-pick-key
+                        :parameters (?from - cell ?to - cell ?dragon - cell)
+                        :precondition (and
+                            (dragon-pos ?dragon)
+                            (not (dragon-pos ?to))
+                            (hero-pos ?from)
+                            (key-pos ?to)
+                            (key-pos ?to)
+                            (or (connected ?from ?to) (connected ?to ?from))
+                        )
+                        :effect (and
+                            (not (hero-pos ?from))
+                            (hero-pos ?to)
+                            (when
+                                (and (dragon-pos cell-1-1))
+                                (and (dragon-pos cell-2-1) (not(dragon-pos ?dragon)))
+                            )
+                            (when
+                                (and (dragon-pos cell-2-1))
+                                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
+                            )
+                        )
+                    )
+                    ;define actions here
+                
+                )
+            </textarea>
+            <textarea class="problem">
+                (define (problem problem_name)
+                (:domain domain_name)
+                (:objects
+                    cell-0-0 - cell
+                    cell-0-1 - cell
+                    cell-0-2 - cell
+                    cell-1-0 - cell
+                    cell-1-1 - cell
+                    cell-1-2 - cell
+                    cell-2-0 - cell
+                    cell-2-1 - cell
+                    cell-2-2 - cell
+                )
+            
+                (:init
+                    (connected cell-0-0 cell-0-1)
+                    (connected cell-0-0 cell-1-0)
+                    (connected cell-1-1 cell-0-1)
+                    (connected cell-1-1 cell-1-0)
+                    (connected cell-0-2 cell-1-2)
+                    (connected cell-0-2 cell-0-1)
+                    (connected cell-1-1 cell-1-2)
+                    (connected cell-2-1 cell-2-2)
+                    (connected cell-2-1 cell-2-0)
+                    (connected cell-2-1 cell-1-1)
+                    (connected cell-2-0 cell-1-0)
+                    (connected cell-2-2 cell-1-2)
+                    (hero-pos cell-0-0)
+                    (princes-pos cell-2-0)
+                    (goal cell-2-2)
+                    (key-pos cell-2-2)
+                    (stone-pos cell-1-1)
+                    (dragon-pos cell-2-1)
+                    ; (dragon-move cell-1-1 cell-1-2 cell-2-1)
+            
+                    ;todo: put the initial state's facts and numeric values here
+                )
+            
+                (:goal
+                    (and
+                        (exists
+                            ( ?c - cell)
+                            (and (goal ?c) (hero-pos ?c) (princes-pos ?c) (key-pos ?c))
+                        )
+                    )
+                    ;un-comment the following line if metric is needed
+                    ;(:metric minimize (???))
+                )
+            )
+            </textarea>
+        </div> -->
+    </div>
+    <script type="text/javascript" src="app.js"></script>
+</body>
+
+</html>
