@@ -12,8 +12,8 @@
     ;(:constants )
     (:constants
         cell-n-n - cell
-        dragonStart - cell
-        dragonEnd - cell
+        cell-1-0 - cell
+        cell-1-1 - cell
     )
 
     (:predicates ;todo: define predicates here
@@ -46,12 +46,12 @@
             (not (hero-pos ?from))
             (hero-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )
@@ -73,12 +73,12 @@
             (not (key-pos ?from))
             (key-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )
@@ -100,12 +100,12 @@
             (not (key-pos ?from))
             (key-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )
@@ -125,12 +125,12 @@
             (not (key-pos ?from))
             (key-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )
@@ -148,12 +148,12 @@
             (not (hero-pos ?from))
             (hero-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )
@@ -171,12 +171,12 @@
             (not (hero-pos ?from))
             (hero-pos ?to)
             (when
-                (and (dragon-pos dragonStart))
-                (and (dragon-pos dragonEnd) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-0))
+                (and (dragon-pos cell-1-1) (not(dragon-pos ?dragon)))
             )
             (when
-                (and (dragon-pos dragonEnd))
-                (and (dragon-pos dragonStart) (not(dragon-pos ?dragon)))
+                (and (dragon-pos cell-1-1))
+                (and (dragon-pos cell-1-0) (not(dragon-pos ?dragon)))
             )
         )
     )

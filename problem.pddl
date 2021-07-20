@@ -26,8 +26,13 @@
         (connected cell-2-1 cell-1-1)
         (connected cell-2-0 cell-1-0)
         (connected cell-2-2 cell-1-2)
+        (princes-pos cell-1-2)
+        (goal cell-2-2)
+        (block-pos cell-1-1)
+        (key-pos cell-2-0)
         (hero-pos cell-0-0)
-        $
+        (sword-pos cell-0-1)
+        (dragon-pos cell-1-0)
         ;todo: put the initial state's facts and numeric values here
     )
 
