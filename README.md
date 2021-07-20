@@ -4,17 +4,17 @@ A fully working pddl solution to the unfamous game - "save the princes" with ful
 [demo](https://save-the-princes.surge.sh/)
 
 
-[![N|Solid](https://save-the-princes.surge.sh/princes.png)]
-# BondIT Webapp
+# Save the princes PDDL
 
 ## How do i run ?
 ### 1. Repo cloning
 ```sh
 git clone https://github.com/JonathanLibes/save-the-princes-pddl.git
 ```
+### 2. Run the project
+for running the project, navigate to the main repo directory
+now you will need or to open the file index.html with browser (chrome/firefox, ie not tested)
+or
+host the directory locally with lite-server or any other local host gosting app
 --------------------------
-
-Just for chrome for the cors issue:
-Navigate to
-chrome://flags/ 
-set 'same-site-by-default-cookies' to disabled
+All the code is written by Haim Petel And Jonathan Libeskind
