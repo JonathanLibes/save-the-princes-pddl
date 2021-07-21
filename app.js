@@ -1,3 +1,13 @@
+import { default as images } from './assets.js'
+
+document.querySelector('#dragon-pos').src = images['dragon.gif'];
+document.querySelector('#key-pos').src = images['key.png'];
+document.querySelector('#princes-pos').src = images['princes.png'];
+document.querySelector('#hero-pos').src = images['hero.png'];
+document.querySelector('#goal').src = images['goal.png'];
+document.querySelector('#block-pos').src = images['block.png'];
+document.querySelector('#sword-pos').src = images['sword.png'];
+
 let problem = `(define (problem problem_name)
 (:domain domain_name)
 (:objects
@@ -48,7 +58,7 @@ let domain = `;Header and description
     (:requirements :strips :fluents :typing :conditional-effects :negative-preconditions :equality :disjunctive-preconditions)
 
     (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
-        cell player princess-status key-status
+        cell
     )
 
     ; un-comment following line if constants are needed
@@ -309,14 +319,14 @@ const actionToFuncitonMap = {
     'walk-with-princes': ([from, to, dragonPos]) => {
         moveOnBoard('hero', extractCell(from), extractCell(to));
         // moveOnBoard('key', extractCell(from), extractCell(to));
-        moveOnBoard('princess', extractCell(from), extractCell(to));
+        moveOnBoard('princes', extractCell(from), extractCell(to));
         moveOnBoard('dragon', extractCell(dragonPos));
     },
     'hero-pos': ([position]) => {
         addToBoard('hero', extractCell(position));
     },
     'princes-pos': ([position]) => {
-        addToBoard('princess', extractCell(position));
+        addToBoard('princes', extractCell(position));
     },
     'key-pos': ([position]) => {
         addToBoard('key', extractCell(position));
@@ -349,9 +359,9 @@ function initMatrix() {
         gameMatrix[i] = [[], [], []];
     }
 }
-
+let actionsAndTimwArray;
 function initBoard(splitterChar) {
-    let actionsAndTimwArray = initString.split(splitterChar);
+    actionsAndTimwArray = initString.split(splitterChar);
     actionsAndTimwArray.forEach(actionString => {
         const { action, params } = extractActionAndParams(actionString);
         action && action(params)
@@ -369,8 +379,6 @@ function startSolution(sol) {
             document.querySelector('.current-step').innerHTML = index + 1;
             const { action, params } = extractActionAndParams(actionString);
             action(params)
-            debugger
-            console.log(index);
             if (index === actionsAndTimwArray.length - 1) {
                 $('.repeat').removeClass('disabled');
                 $('.reset').removeClass('disabled');
@@ -391,7 +399,8 @@ function extractCell(cellString) {
 }
 
 function addToBoard(figure, { x, y }) {
-    const figureHtmlElment = `<img data-figure="${figure}" src="./${figure}.png" onerror="this.src='./${figure}.gif';"/>`
+    const src = images[`${figure}.png`] || images[`${figure}.gif`];
+    const figureHtmlElment = `<img data-figure="${figure}" src="${src}"/>`
     if (!gameMatrix[x][y].length)
         gameMatrix[x][y] = []
     gameMatrix[x][y].push(figureHtmlElment);
@@ -399,7 +408,8 @@ function addToBoard(figure, { x, y }) {
 }
 let dragonFirst = true;
 function moveOnBoard(figure, from, to) {
-    const figureHtmlElment = `<img data-figure="${figure}" src="./${figure}.png" onerror="this.src='./${figure}.gif';"/>`
+    const src = images[`${figure}.png`] || images[`${figure}.gif`];
+    const figureHtmlElment = `<img data-figure="${figure}" src="${src}"/>`
     if (figure == 'dragon') {
         let x, y;
         gameMatrix.forEach((row, i) => row.forEach((cell, j) => {
@@ -417,7 +427,6 @@ function moveOnBoard(figure, from, to) {
         const figureIndex = prevCell.indexOf(figureHtmlElment);
         prevCell.splice(figureIndex, 1);
     }
-    debugger
     if (Number.isInteger(+to.y) && Number.isInteger(+to.x)) {
         const nextCell = gameMatrix[to.x][to.y];
         nextCell.push(figureHtmlElment);
@@ -432,7 +441,7 @@ function drawBoard() {
 };
 
 let cursor;
-function onCharacterSelection(event) {
+window.onCharacterSelection = (event) => {
     if (onSelectionMode) {
         $(`#${characterSelected}`).css('backgroundColor', '');
         if (event.target.id === characterSelected) {
@@ -446,7 +455,7 @@ function onCharacterSelection(event) {
     onSelectionMode = true;
 }
 
-function onCellSelection(event) {
+window.onCellSelection = (event) => {
     if (!onSelectionMode) return;
     const pos = event.target.id;
     if (characterSelected === "dragon-pos") {
@@ -478,7 +487,7 @@ function initDragon(pos) {
     newDomain = domain.replaceAll('dragonStart', posString).replaceAll('dragonEnd', nextPosString);
 }
 
-function repeatLastSol() {
+window.repeatLastSol = () => {
     // if (stage == 'custom') {
     initMatrix();
     initBoard('\n');
@@ -487,7 +496,7 @@ function repeatLastSol() {
     // }
 }
 
-function reset() {
+window.reset = () => {
     initMatrix();
     selectStage('custom');
     initString = '';
@@ -506,7 +515,7 @@ function reset() {
 
 
 
-function solve() {
+window.solve = () => {
 
     const newProblem = problem.replace('$', initString);
 
@@ -533,16 +542,16 @@ function solve() {
 
 var stage = 'custom';
 const selectElement = document.getElementById('menu1');
-function selectStage(selectedStage) {
+window.selectStage = (selectedStage) => {
     stage = selectedStage;
     $('.repeat').addClass('disabled');
 
     let initFunc = {
-        1: () => initString = this[`problem${stage}`],
-        2: () => initString = this[`problem${stage}`],
-        3: () => initString = this[`problem${stage}`],
+        1: () => initString = problem1,
+        2: () => initString = problem2,
+        3: () => initString = problem3,
         custom: () => { initString = '' }
-    }[stage];
+    }[stage]();
     if (stage == 'custom') {
         let images = $('.characters img');
         selectElement.innerText = 'custom';
@@ -552,20 +561,20 @@ function selectStage(selectedStage) {
         // }
     }
     else {
+        initDragon(initString.split('dragon-pos cell-')[1].replace(')', ''));
         selectElement.innerText = `problem #${selectedStage}`;
     }
     $('.characters').css('opacity', stage === 'custom' ? '1' : '0');
     initMatrix();
     drawBoard();
-    initFunc();
-    initDragon(initString.split('dragon-pos cell-')[1].replace(')', ''));
+    // initFunc();
     initBoard('\n');
     $('.solve').removeClass('disabled');
 }
 initMatrix()
 drawBoard();
-var problem1 = '(goal cell-1-1)\n(princes-pos cell-0-0)\n(key-pos cell-0-1)\n(hero-pos cell-0-2)\n(dragon-pos cell-2-0)';
-var problem2 = '(princes-pos cell-1-1)\n(goal cell-2-2)\n(block-pos cell-2-1)\n(key-pos cell-2-0)\n(hero-pos cell-0-2)\n(sword-pos cell-1-2)\n(dragon-pos cell-1-0)\n';
-var problem3 = '(princes-pos cell-1-2)\n(goal cell-2-2)\n(block-pos cell-1-1)\n(key-pos cell-2-0)\n(hero-pos cell-0-0)\n(sword-pos cell-0-1)\n(dragon-pos cell-1-0)\n';
+const problem1 = '(goal cell-1-1)\n(princes-pos cell-0-0)\n(key-pos cell-0-1)\n(hero-pos cell-0-2)\n(dragon-pos cell-2-0)';
+const problem2 = '(princes-pos cell-1-1)\n(goal cell-2-2)\n(block-pos cell-2-1)\n(key-pos cell-2-0)\n(hero-pos cell-0-2)\n(sword-pos cell-1-2)\n(dragon-pos cell-1-0)\n';
+const problem3 = '(princes-pos cell-1-2)\n(goal cell-2-2)\n(block-pos cell-1-1)\n(key-pos cell-2-0)\n(hero-pos cell-0-0)\n(sword-pos cell-0-1)\n(dragon-pos cell-1-0)\n';
 
 selectStage('custom');

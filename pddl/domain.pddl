@@ -5,7 +5,7 @@
     (:requirements :strips :fluents :typing :conditional-effects :negative-preconditions :equality :disjunctive-preconditions)
 
     (:types ;todo: enumerate types and their hierarchy here, e.g. car truck bus - vehicle
-        cell player princess-status key-status
+        cell
     )
 
     ; un-comment following line if constants are needed

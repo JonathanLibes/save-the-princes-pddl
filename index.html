@@ -13,7 +13,7 @@
     <style>
         body,
         html {
-            background-image: linear-gradient(rgba(255, 255, 255, 0.750), rgba(255, 255, 255, 0.746)), url('./bg.jpg');
+            background-image: linear-gradient(rgba(255, 255, 255, 0.750), rgba(255, 255, 255, 0.746)), url('./assets/bg.jpg');
             display: flex;
             align-items: center;
             flex-direction: column;
@@ -51,7 +51,7 @@
             max-width: 240px;
             max-height: 240px;
             position: relative;
-            background: url('./grass.png');
+            background: url('./assets/grass.png');
             background-repeat: no-repeat;
             background-position: bottom center;
             background-size: 245PX auto;
@@ -65,7 +65,7 @@
 
         img[data-figure="princess"] {
             z-index: 0;
-            background: url('./lock.png');
+            background: url('./assets/lock.png');
             background-repeat: no-repeat;
             background-position: top right;
             background-size: contain;
@@ -163,7 +163,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: url('./charter.png');
+            background: url('./assets/charter.png');
             background-repeat: no-repeat;
             background-position: top right;
             background-size: cover;
@@ -191,7 +191,8 @@
         .dropdown-menu {
             transform: translate(20px, -20px);
         }
-        #menu1::after{
+
+        #menu1::after {
             content: '›';
             display: inline-block;
             transform: rotate(90deg) translateY(-5px);
@@ -203,13 +204,13 @@
 <body>
     <div class="main-container">
         <div class="characters">
-            <img id="dragon-pos" src="./dragon.gif" onclick="onCharacterSelection(event)">
-            <img id="key-pos" src="./key.png" onclick="onCharacterSelection(event)">
-            <img id="princes-pos" src="./princess.png" onclick="onCharacterSelection(event)">
-            <img id="hero-pos" src="./hero.png" onclick="onCharacterSelection(event)">
-            <img id="goal" src="./goal.png" onclick="onCharacterSelection(event)">
-            <img id="block-pos" src="./block.png" onclick="onCharacterSelection(event)">
-            <img id="sword-pos" src="./sword.png" onclick="onCharacterSelection(event)">
+            <img id="dragon-pos" onclick="onCharacterSelection(event)">
+            <img id="key-pos" onclick="onCharacterSelection(event)">
+            <img id="princes-pos" onclick="onCharacterSelection(event)">
+            <img id="hero-pos" onclick="onCharacterSelection(event)">
+            <img id="goal" onclick="onCharacterSelection(event)">
+            <img id="block-pos" onclick="onCharacterSelection(event)">
+            <img id="sword-pos" onclick="onCharacterSelection(event)">
         </div>
         <div class="board-container">
             <div class="steps-container">
@@ -223,10 +224,13 @@
                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                         <li onclick="selectStage(1)" role="presentation"><a role="menuitem" tabindex="-1"
                                 href="#">problem #1</a></li>
-                        <li onclick="selectStage(2)" role="presentation"><a role="menuitem" tabindex="-1" href="#">problem #2</a></li>
-                        <li onclick="selectStage(3)" role="presentation"><a role="menuitem" tabindex="-1" href="#">problem #3</a></li>
+                        <li onclick="selectStage(2)" role="presentation"><a role="menuitem" tabindex="-1"
+                                href="#">problem #2</a></li>
+                        <li onclick="selectStage(3)" role="presentation"><a role="menuitem" tabindex="-1"
+                                href="#">problem #3</a></li>
                         <li role="presentation" class="divider"></li>
-                        <li onclick="selectStage('custom')" role="presentation"><a role="menuitem" tabindex="-1" href="#">custom</a></li>
+                        <li onclick="selectStage('custom')" role="presentation"><a role="menuitem" tabindex="-1"
+                                href="#">custom</a></li>
                     </ul>
                 </div>
                 <div class="solve disabled btn-container">
@@ -467,7 +471,7 @@
             </textarea>
         </div> -->
     </div>
-    <script type="text/javascript" src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 
 </html>
